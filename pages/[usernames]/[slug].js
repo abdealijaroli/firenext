@@ -1,7 +1,11 @@
+import { useRouter } from "next/router"
+
 export default function UsersPostPage() {
+   const router = useRouter()
+   const { slug } = router.query
    return (
       <div>
-         User's posts
+         {slug}'s Page
       </div>
    );
 }
