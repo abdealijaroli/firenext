@@ -15,10 +15,8 @@ body {
   font-family: 'Noto Sans', sans-serif;
   background-color: var(--color-bg);
   color: var(--color-text);
-  margin: 40px;
+  margin-top: 40px;
 }
-
-
 
 main {
   padding: 1rem 10vw;
