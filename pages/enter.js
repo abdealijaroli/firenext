@@ -1,7 +1,28 @@
+import { auth } from "../lib/firebase";
+
 export default function Enter() {
+   const user = null;
+   const username = null;
+   
    return (
-      <div>
-         Sign Up
-      </div>
+      <main>
+         {user ? 
+            !username ? <UsernameForm/> : <SignOutButton/>
+         :
+         <SignInButton/>
+         }
+      </main>
    );
+}
+
+function  SignInButton() {
+   const signInButton = async () => {
+      await auth.signInWithPopup(googleAuthProvider);
+   }
+}
+function SignOutButton() {
+   
+}
+function UsernameForm() {
+   
 }
