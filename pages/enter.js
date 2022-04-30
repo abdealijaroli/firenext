@@ -1,8 +1,9 @@
 import { auth } from "../lib/firebase";
+import { useContext } from "react";
+import { UserContext } from "../lib/context";
 
 export default function Enter() {
-   const user = null;
-   const username = null;
+   const { user, username } = useContext(UserContext);
 
    return (
       <main>
@@ -20,11 +21,11 @@ function SignInButton() {
       const signInWithGoogle = async () => {
          await auth.signInWithPopup(googleAuthProvider);
       }
-   } catch (error){
+   } catch (error) {
       console.log(error);
    }
 
-   return(
+   return (
       <button className="btn-google" onclick={signInWithGoogle}>
          Sign In With Google
       </button>
