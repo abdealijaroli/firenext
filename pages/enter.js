@@ -1,17 +1,26 @@
-import { auth, firestore, googleAuthProvider, popUp } from '../lib/firebase';
+import { useEffect, useState, useCallback, useContext } from 'react';
+import { auth, firestore, googleAuthProvider, popUp, db } from '../lib/firebase';
+import { collection, getDocs } from "firebase/firestore";
 import { UserContext } from '../lib/context';
 // import Metatags from '@components/Metatags';
-
-import { useEffect, useState, useCallback, useContext } from 'react';
 import debounce from 'lodash.debounce';
 
 export default function Enter() {
    const { user, username } = useContext(UserContext);
+   const [userData, setUserData] = useState([]);
+
+   useEffect(() => {
+      const getUserData = async () => {
+         const res = await getDocs(collection(db, "users"));
+         setUserData(res.docs.map((doc) => ({ ...doc.data(), id: doc.id })));
+      }
+      getUserData();
+   }, [])
 
    return (
       <main>
          {user ?
-            !username ? <UsernameForm /> : <SignOutButton /> 
+            !username ? <UsernameForm /> : <SignOutButton />
             :
             <SignInButton />
          }
@@ -48,8 +57,8 @@ function UsernameForm() {
       e.preventDefault();
 
       // Create refs for both documents
-      const userDoc = firestore.doc(`users/${user.uid}`);
-      const usernameDoc = firestore.doc(`usernames/${formValue}`);
+      const userDoc = getDocs(collection(db, `users/${user.uid}`));
+      const usernameDoc = getDocs(collection(db, `usernames/${formValue}`));
 
       // Commit both docs together as a batch write.
       const batch = firestore.batch();
@@ -89,7 +98,7 @@ function UsernameForm() {
    const checkUsername = useCallback(
       debounce(async (username) => {
          if (username.length >= 3) {
-            const ref = firestore.doc(`usernames/${username}`);
+            const ref = getDocs(collection(db, `username/${username}`));
             const { exists } = await ref.get();
             console.log('Firestore read executed!');
             setIsValid(!exists);
